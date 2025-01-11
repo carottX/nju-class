@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Reviews</title>
+    <title>NJU选课助手</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -19,21 +19,25 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center">Course Reviews</h1>
+        <h1 class="text-center">NJU选课助手</h1>
+        <div class="text-center mb-4">
+            <span>Created by carottx</span> | 
+            <a href="https://github.com/carottX/nju-class" target="_blank">项目主页</a>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="teacherName">Search by Teacher</label>
-                    <input type="text" id="teacherName" class="form-control" placeholder="Enter teacher name">
-                    <button class="btn btn-primary mt-2" onclick="searchTeacher()">Search</button>
+                    <label for="teacherName">按老师查找</label>
+                    <input type="text" id="teacherName" class="form-control" placeholder="输入老师名字">
+                    <button class="btn btn-primary mt-2" onclick="searchTeacher()">查找</button>
                 </div>
                 <div id="teacherResults"></div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="courseName">Search by Course</label>
-                    <input type="text" id="courseName" class="form-control" placeholder="Enter course name">
-                    <button class="btn btn-primary mt-2" onclick="searchCourse()">Search</button>
+                    <label for="courseName">按课程查找</label>
+                    <input type="text" id="courseName" class="form-control" placeholder="输入课程名字">
+                    <button class="btn btn-primary mt-2" onclick="searchCourse()">查找</button>
                 </div>
                 <div id="courseResults"></div>
             </div>
