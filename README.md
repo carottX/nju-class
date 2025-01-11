@@ -11,6 +11,7 @@
 
 ## TODO：
 排序有关评价
+合并相同课程
 
 ## DEMO SITE
-http://nju.ys.al
+https://nju.ys.al
