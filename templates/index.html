@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Reviews</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Course Reviews</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="teacherName">Search by Teacher</label>
+                    <input type="text" id="teacherName" class="form-control" placeholder="Enter teacher name">
+                    <button class="btn btn-primary mt-2" onclick="searchTeacher()">Search</button>
+                </div>
+                <div id="teacherResults"></div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="courseName">Search by Course</label>
+                    <input type="text" id="courseName" class="form-control" placeholder="Enter course name">
+                    <button class="btn btn-primary mt-2" onclick="searchCourse()">Search</button>
+                </div>
+                <div id="courseResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchTeacher() {
+            const teacherName = document.getElementById('teacherName').value;
+            fetch(`/search/teacher?name=${teacherName}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('teacherResults');
+                    resultsDiv.innerHTML = '';
+                    if (data.error) {
+                        resultsDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    } else if (data.message) {
+                        resultsDiv.innerHTML = `<div class="alert alert-warning">${data.message}</div>`;
+                    } else {
+                        data.forEach(item => {
+                            const reviews = Object.keys(item)
+                                .filter(key => key.startsWith('评价'))
+                                .map(key => item[key])
+                                .filter(review => review)
+                                .join('<hr>'); // 使用水平线分割评价
+                            const card = document.createElement('div');
+                            card.className = 'card';
+                            card.innerHTML = `
+                                <div class="card-body">
+                                    <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
+                                    <p class="card-text">${reviews}</p>
+                                </div>
+                            `;
+                            resultsDiv.appendChild(card);
+                        });
+                    }
+                });
+        }
+
+        function searchCourse() {
+            const courseName = document.getElementById('courseName').value;
+            fetch(`/search/course?name=${courseName}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('courseResults');
+                    resultsDiv.innerHTML = '';
+                    if (data.error) {
+                        resultsDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    } else if (data.message) {
+                        resultsDiv.innerHTML = `<div class="alert alert-warning">${data.message}</div>`;
+                    } else {
+                        data.forEach(item => {
+                            const reviews = Object.keys(item)
+                                .filter(key => key.startsWith('评价'))
+                                .map(key => item[key])
+                                .filter(review => review)
+                                .join('<hr>'); // 使用水平线分割评价
+                            const card = document.createElement('div');
+                            card.className = 'card';
+                            card.innerHTML = `
+                                <div class="card-body">
+                                    <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
+                                    <p class="card-text">${reviews}</p>
+                                </div>
+                            `;
+                            resultsDiv.appendChild(card);
+                        });
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
