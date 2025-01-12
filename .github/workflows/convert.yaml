@@ -1,0 +1,20 @@
+name: convert
+
+on: [workflow_dispatch]
+
+jobs: 
+  convert_to_xlsx:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup python environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    - run: pip install openpyxl
+    - name: Convert
+      run: python3 ./convert.py
+    - name: Pushback
+      run: bash ./pushback.sh

@@ -9,14 +9,12 @@ app = Flask(__name__)
 
 # 读取所有xlsx文件并合并数据
 def load_data():
-    all_files = glob.glob("data/*.xlsx")
+    all_files = glob.glob("data/*.json")
     df_list = []
     for file in all_files:
-        xls = pd.ExcelFile(file)
-        for sheet_name in xls.sheet_names:
-            print(f'Reading {file} - {sheet_name}')
-            df = pd.read_excel(xls, sheet_name=sheet_name)
-            df_list.append(df)
+        print(f'Reading {file}')
+        df = pd.read_json(file)
+        df_list.append(df)
     combined_df = pd.concat(df_list, ignore_index=True)
     return combined_df
 
