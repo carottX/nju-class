@@ -80,7 +80,7 @@ def merge_json_files():
                         key = (course_name, teacher)
                         for k, v in entry.items():
                             if k.startswith('评价'):
-                                if teacher == '蒋天婵':print(filename, v)
+                                #if teacher == '蒋天婵':print(filename, v)
                                 merged_data[key][k].append(v) 
     # 合并评价
     result = []
@@ -94,9 +94,9 @@ def merge_json_files():
         for tmp in evaluations.values():
             for eval in tmp:
                 if type(eval) == list:
-                    for element in eval: evals.add(element)
+                    for element in eval: evals.add(element.strip())
                 else:
-                    evals.add(eval)
+                    evals.add(eval.strip())
         for eval in evals:
             merged_entry[f'评价_{cnt}'] = eval
             cnt += 1
