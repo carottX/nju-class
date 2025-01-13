@@ -1,3 +1,4 @@
 openpyxl
 flask
 pypinyin
+seatable_api
