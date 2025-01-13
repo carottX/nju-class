@@ -15,7 +15,7 @@ xlsx 文件可以通过 `convert.py` 转换为 json 文件
 排序有关评价
 
 ## DEMO SITE
-http://nju.ys.al
+https://nju.ys.al
 
 ## 如何在本地部署
 以 linux 系统为例：
