@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import glob
 import os
 import json
@@ -38,7 +36,7 @@ for xlsx_file in glob.glob("data/*.xlsx"):
                 if k == "课程名称" and (v is None or v == ""):
                     v = sheet_name
                 if v is not None:
-                    filtered[k] = v
+                    filtered[k] = str(v)
             if not has_kecheng:
                 filtered["课程名称"] = sheet_name
             if filtered:

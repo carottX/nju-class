@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # 读取所有xlsx文件并合并数据
 def load_data():
-    all_files = glob.glob("data/*.json")
+    all_files = glob.glob("data/merged_data.json")
     df_list = []
     for file in all_files:
         print(f'Reading {file}')
