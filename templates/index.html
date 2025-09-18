@@ -84,17 +84,37 @@
                             const reviews = Object.keys(item)
                                 .filter(key => key.startsWith('评价'))
                                 .map(key => item[key])
-                                .filter(review => review)
-                                .join('<hr>'); // 使用水平线分割评价
-                            const card = document.createElement('div');
-                            card.className = 'card';
-                            card.innerHTML = `
-                                <div class="card-body">
-                                    <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
-                                    <p class="card-text">${reviews}</p>
-                                </div>
-                            `;
-                            resultsDiv.appendChild(card);
+                                .filter(review => review);
+                            
+                            const sources = item.来源 ? (Array.isArray(item.来源) ? item.来源.join(', ') : item.来源) : '未知来源';
+                            
+                            // 为每一条评价创建单独的卡片
+                            if (reviews.length > 0) {
+                                reviews.forEach(review => {
+                                    const card = document.createElement('div');
+                                    card.className = 'card';
+                                    card.innerHTML = `
+                                        <div class="card-body">
+                                            <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
+                                            <small class="text-muted">来源: ${sources}</small>
+                                            <p class="card-text">${review}</p>
+                                        </div>
+                                    `;
+                                    resultsDiv.appendChild(card);
+                                });
+                            } else {
+                                // 如果没有评价，显示基本信息
+                                const card = document.createElement('div');
+                                card.className = 'card';
+                                card.innerHTML = `
+                                    <div class="card-body">
+                                        <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
+                                        <small class="text-muted">来源: ${sources}</small>
+                                        <p class="card-text text-muted">暂无评价</p>
+                                    </div>
+                                `;
+                                resultsDiv.appendChild(card);
+                            }
                         });
                     }
                 });
@@ -116,17 +136,37 @@
                             const reviews = Object.keys(item)
                                 .filter(key => key.startsWith('评价'))
                                 .map(key => item[key])
-                                .filter(review => review)
-                                .join('<hr>'); // 使用水平线分割评价
-                            const card = document.createElement('div');
-                            card.className = 'card';
-                            card.innerHTML = `
-                                <div class="card-body">
-                                    <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
-                                    <p class="card-text">${reviews}</p>
-                                </div>
-                            `;
-                            resultsDiv.appendChild(card);
+                                .filter(review => review);
+                            
+                            const sources = item.来源 ? (Array.isArray(item.来源) ? item.来源.join(', ') : item.来源) : '未知来源';
+                            
+                            // 为每一条评价创建单独的卡片
+                            if (reviews.length > 0) {
+                                reviews.forEach(review => {
+                                    const card = document.createElement('div');
+                                    card.className = 'card';
+                                    card.innerHTML = `
+                                        <div class="card-body">
+                                            <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
+                                            <small class="text-muted">来源: ${sources}</small>
+                                            <p class="card-text">${review}</p>
+                                        </div>
+                                    `;
+                                    resultsDiv.appendChild(card);
+                                });
+                            } else {
+                                // 如果没有评价，显示基本信息
+                                const card = document.createElement('div');
+                                card.className = 'card';
+                                card.innerHTML = `
+                                    <div class="card-body">
+                                        <h5 class="card-title">${item.课程名称} - ${item.教师}</h5>
+                                        <small class="text-muted">来源: ${sources}</small>
+                                        <p class="card-text text-muted">暂无评价</p>
+                                    </div>
+                                `;
+                                resultsDiv.appendChild(card);
+                            }
                         });
                     }
                 });

@@ -73,7 +73,16 @@ def search_teacher():
         pinyin_match = data[data['教师'].apply(lambda x: match_pinyin_initials(x, teacher_name))]
         
         # 合并结果，精准匹配的结果在前
-        result = pd.concat([exact_match, partial_match, pinyin_match]).drop_duplicates()
+        result = pd.concat([exact_match, partial_match, pinyin_match])
+        
+        # 处理包含列表的列，将其转换为字符串以便去重
+        if '来源' in result.columns:
+            result['来源_str'] = result['来源'].apply(lambda x: str(x) if isinstance(x, list) else x)
+            result = result.drop_duplicates(subset=[col for col in result.columns if col != '来源'])
+            result = result.drop('来源_str', axis=1)
+        else:
+            result = result.drop_duplicates()
+            
         result = result.apply(lambda x: x.dropna(), axis=1)
     
     if result.empty:
@@ -99,7 +108,16 @@ def search_course():
         partial_match = data[data['课程名称'].str.contains(regex, na=False) & (data['课程名称'] != course_name)]
         
         # 合并结果，精准匹配的结果在前
-        result = pd.concat([exact_match, partial_match]).drop_duplicates()
+        result = pd.concat([exact_match, partial_match])
+        
+        # 处理包含列表的列，将其转换为字符串以便去重
+        if '来源' in result.columns:
+            result['来源_str'] = result['来源'].apply(lambda x: str(x) if isinstance(x, list) else x)
+            result = result.drop_duplicates(subset=[col for col in result.columns if col != '来源'])
+            result = result.drop('来源_str', axis=1)
+        else:
+            result = result.drop_duplicates()
+            
         result = result.apply(lambda x: x.dropna(), axis=1)
     
     if result.empty:

@@ -49,7 +49,8 @@ def fetch_data():
                         continue
                     entry = {
                         "课程名称": row[course_row_name],
-                        "教师": row[teacher_row_name]
+                        "教师": row[teacher_row_name],
+                        "来源": f"NJU Table - {table_name}"
                     }
                     # 添加评价列
                     cnt = 0
@@ -66,7 +67,7 @@ def fetch_data():
 
 def merge_json_files():
     data_folder = 'data'
-    merged_data = defaultdict(lambda: defaultdict(list))
+    all_reviews = []  # 存储所有的评价条目
 
     # 读取所有 .json 文件
     for filename in os.listdir(data_folder):
@@ -77,34 +78,47 @@ def merge_json_files():
                 for entry in data:
                     course_name = entry.get('课程名称')
                     teacher = entry.get('教师')
+                    source = entry.get('来源', filename)  # 获取来源信息，如果没有则使用文件名
+                    
                     if course_name or teacher:
-                        key = (course_name, teacher)
+                        # 为每个评价创建单独的条目
+                        reviews = []
                         for k, v in entry.items():
-                            if k.startswith('评价'):
-                                #if teacher == '蒋天婵':print(filename, v)
-                                merged_data[key][k].append(v) 
-    # 合并评价
-    result = []
-    for (course_name, teacher), evaluations in merged_data.items():
-        merged_entry = {
-            '课程名称': course_name,
-            '教师': teacher
-        }
-        cnt = 0
-        evals = set()
-        for tmp in evaluations.values():
-            for eval in tmp:
-                if type(eval) == list:
-                    for element in eval: evals.add(element.strip())
-                else:
-                    evals.add(eval.strip())
-        for eval in evals:
-            merged_entry[f'评价_{cnt}'] = eval
-            cnt += 1
-        if len(merged_entry) > 2:
-            result.append(merged_entry)
+                            if k.startswith('评价') and v:
+                                reviews.append(v.strip() if isinstance(v, str) else str(v).strip())
+                        
+                        # 如果有评价，为每个评价创建条目；如果没有评价，创建一个基本条目
+                        if reviews:
+                            for review in reviews:
+                                review_entry = {
+                                    '课程名称': course_name,
+                                    '教师': teacher,
+                                    '来源': [source],
+                                    '评价_0': review
+                                }
+                                all_reviews.append(review_entry)
+                        else:
+                            basic_entry = {
+                                '课程名称': course_name,
+                                '教师': teacher,
+                                '来源': [source]
+                            }
+                            all_reviews.append(basic_entry)
+
+    # 去重：合并相同课程、教师、评价内容的条目，合并来源信息
+    unique_reviews = {}
+    for review in all_reviews:
+        key = (review['课程名称'], review['教师'], review.get('评价_0', ''))
+        if key in unique_reviews:
+            # 合并来源信息
+            existing_sources = set(unique_reviews[key]['来源'])
+            new_sources = set(review['来源'])
+            unique_reviews[key]['来源'] = list(existing_sources | new_sources)
+        else:
+            unique_reviews[key] = review.copy()
 
     # 保存合并后的数据
+    result = list(unique_reviews.values())
     with open('data/merged_data.json', 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=4)
 
