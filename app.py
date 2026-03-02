@@ -67,8 +67,14 @@ def search_teacher():
         def match_pinyin_initials(name, initials):
             if pd.isna(name):
                 return False
-            pinyin_initials = ''.join([p[0] for p in lazy_pinyin(name, style=Style.FIRST_LETTER)])
-            return pinyin_initials.startswith(initials.lower())
+            teacher_names = name.split() # 假设教师名字之间用空格分隔
+            for teacher in teacher_names:
+                if not teacher:
+                    continue
+                pinyin_initials = ''.join([p[0] for p in lazy_pinyin(teacher, style=Style.FIRST_LETTER)])
+                if pinyin_initials.startswith(initials.lower()):
+                    return True
+            return False
         
         pinyin_match = data[data['教师'].apply(lambda x: match_pinyin_initials(x, teacher_name))]
         
