@@ -63,11 +63,10 @@ def search_teacher():
         # 模糊匹配
         partial_match = data[data['教师'].str.contains(regex, na=False) & (data['教师'] != teacher_name)]
         
-        # 拼音首字母匹配
         def match_pinyin_initials(name, initials):
             if pd.isna(name):
                 return False
-            teacher_names = name.split() # 假设教师名字之间用空格分隔
+            teacher_names = re.split(r'[；;，,\s、]+', name)
             for teacher in teacher_names:
                 if not teacher:
                     continue
